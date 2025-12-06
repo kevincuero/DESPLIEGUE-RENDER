@@ -1,0 +1,12 @@
+[build]
+builder = "nixpacks"
+builderOptions = { nixpacks = { provider = "python" } }
+
+[deploy]
+startCommand = "gunicorn --bind 0.0.0.0:$PORT app:app"
+healthcheckPath = "/_health"
+restartPolicyType = "never"
+
+[variables]
+FLASK_ENV = "production"
+PYTHON_VERSION = "3.11"

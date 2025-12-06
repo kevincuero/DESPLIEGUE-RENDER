@@ -25,7 +25,18 @@ import csv
 import time
 
 app = Flask(__name__, template_folder='Views', static_folder='Static')
-app.secret_key = 'clave_secreta_gestion_estudiantil_2023'
+# USAR VARIABLE DE ENTORNO PARA SECRET_KEY
+app.secret_key = os.getenv('SECRET_KEY', 'clave_secreta_gestion_estudiantil_2023')
+
+# Configuración para Railway/Producción
+app.config['SESSION_COOKIE_SECURE'] = os.getenv('RAILWAY_ENVIRONMENT') is not None
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['PREFERRED_URL_SCHEME'] = 'https' if os.getenv('RAILWAY_ENVIRONMENT') else 'http'
+
+# ===== EN LA SECCIÓN DE CONFIGURACIÓN DE SUBIDA DE ARCHIVOS =====
+# Asegurar que las carpetas de upload existen
+UPLOAD_FOLDER = os.path.join(app.static_folder, 'uploads', 'hojas')
+CONTENT_UPLOAD_FOLDER = os.path.join(app.static_folder, 'uploads', 'contenidos')
 
 # Rutas para editar/eliminar entregas (movidas aquí para asegurar que `app` exista)
 @app.route('/estudiante/editar_entrega', methods=['POST'])
