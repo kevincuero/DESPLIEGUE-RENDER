@@ -33,6 +33,12 @@ app.config['SESSION_COOKIE_SECURE'] = os.getenv('RAILWAY_ENVIRONMENT') is not No
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['PREFERRED_URL_SCHEME'] = 'https' if os.getenv('RAILWAY_ENVIRONMENT') else 'http'
 
+# ===== HEALTHCHECK PARA RAILWAY =====
+@app.route('/_health', methods=['GET'])
+def healthcheck():
+    """Endpoint simple de healthcheck para Railway."""
+    return {'status': 'ok', 'message': 'Aplicación en línea'}, 200
+
 # ===== EN LA SECCIÓN DE CONFIGURACIÓN DE SUBIDA DE ARCHIVOS =====
 # Asegurar que las carpetas de upload existen
 UPLOAD_FOLDER = os.path.join(app.static_folder, 'uploads', 'hojas')
